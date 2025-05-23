@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Dashboard | Marketa</title>
+    <link rel="stylesheet" href="./admin.css">
+    <!-- <link rel="stylesheet" href="./admin.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- شريط التنقل الجانبي -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../img/5868600733404874759.jpg" alt="شعار المتجر">
+                <h2>Dashboard</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Statistics</li>
+
+                    <li data-section="products"><i class="fas fa-box-open"></i> Product management</li>
+                    <li data-section="orders"><i class="fas fa-shopping-cart"></i>Order management</li>
+                    <li data-section="users"><i class="fas fa-users"></i> User management</li>
+                    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i>Log out</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <header class="admin-header">
+                <h1 id="section-title">Statistics</h1>
+                <div class="admin-info">
+                    <span id="admin-name">Hello, Moderator</span>
+                    <!-- <img src="../img/admin-avatar.png" alt="صورة المشرف"> -->
+                </div>
+            </header>
+
+            <!-- قسم الإحصائيات -->
+            <section id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-box"></i>
+                        <h3>Number of Products</h3>
+<p id="products-count">0</p>
+</div>
+<div class="stat-card">
+<i class="fas fa-shopping-cart"></i>
+<h3>Number of Orders</h3>
+<p id="orders-count">0</p>
+</div>
+<div class="stat-card">
+<i class="fas fa-chart-line"></i>
+<h3>Total Sales</h3>
+<p id="total-sales">$0</p>
+</div>
+<div class="stat-card">
+<i class="fas fa-users"></i>
+<h3>Number of Users</h3>
+<p id="users-count">0</p>
+</div>
+                </div>
+
+                <div class="recent-orders">
+                    <h2>Recent Orders</h2>
+                    <table id="recent-orders-table">
+                    <thead>
+                    <tr>
+                    <th>Order Number</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th> 
+                           </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤها بواسطة JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- قسم إدارة المنتجات -->
+            <section id="products" class="content-section">
+                <div class="section-header">
+                    <h2>Product management</h2>
+                    <button onclick="showAddProductModal()" class="btn-add">
+                        <i class="fas fa-plus"></i> Add a new product 
+                    </button>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" id="product-search" placeholder="ابحث عن منتج...">
+                    <button onclick="searchProducts()"><i class="fas fa-search"></i></button>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Image</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                            </tr>
+
+                    </thead>
+                    <tbody id="products-table">
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- قسم إدارة الطلبات -->
+            <section id="orders" class="content-section">
+                <h2>Order management        </h2>
+                
+                <div class="filters">
+                    <select id="order-status-filter" onchange="filterOrders()">
+                        <option value="all">All statuses</option>
+                        <option value="pending">pending</option>
+                        <option value="processing">processing</option>
+                        <option value="shipped">shipped</option>
+                        <option value="delivered">delivered</option>
+                        <option value="cancelled">cancelled</option>
+                                </select>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order Number</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                  </tr>
+                    </thead>
+                    <tbody id="orders-table">
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- قسم إدارة المستخدمين -->
+            <section id="users" class="content-section">
+                <h2>User Management</h2>
+
+                <table class="data-table">
+                <thead>
+                <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Registration Date</th>
+                <th>Actions</th>
+              </tr>
+                    </thead>
+                    <tbody id="users-table">
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <!-- نافذة إضافة/تعديل منتج -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Add a new product       </h2>
+            
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                
+                <div class="form-group">
+                    <label for="product-name">Product Name</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-price">Price</label>
+                    <input type="number" id="product-price" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-category">Category</label>
+                    <select id="product-category" required>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothes</option>
+                        <option value="home">Houseware</option>
+                        <option value="other">Other</option>
+                    </select>
+                 </div>
+                <div class="form-group">
+                    <label for="product-description">Description</label>
+                    <textarea id="product-description" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                    <label for="product-image">Product Image</label>
+                    <input type="file" id="product-image" accept="image/*">
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">Save</button></form>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل الطلب -->
+    <div id="order-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Order Details #<span id="order-id"></span></h2>
+            
+            <div class="order-info">
+            <div>
+            <h3>Customer Information</h3>
+            <p><strong>Name:</strong> <span id="customer-name"></span></p>
+            <p><strong>Email:</strong> <span id="customer-email"></span></p>
+            <p><strong>Address:</strong> <span id="customer-address"></span></p>
+            </div>  
+                <div>
+                    <h3>Order Information</h3>
+                    <p><strong>Order Date:</strong> <span id="order-date"></span></p>
+                    <p><strong>Status:</strong>
+                    <select id="order-status">
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                    </select>
+                    </p>
+                    <p><strong>Total:</strong> $<span id="order-total"></span></p>
+                </div>
+            </div>
+            
+            <h3>المنتجات</h3>
+            <table class="order-products">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="order-products">
+                    <!-- سيتم ملؤها بواسطة JavaScript -->
+                </tbody>
+            </table>
+            
+            <div class="modal-actions">
+                <button onclick="updateOrderStatus()" class="btn-save">Save changes</button>
+                <button onclick="closeModal()" class="btn-cancel">cancellation</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./admin.js"></script>
+</body>
+</html>
